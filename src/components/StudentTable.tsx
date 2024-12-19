@@ -20,31 +20,33 @@ interface StudentTableProps {
 
 const StudentTable: React.FC<StudentTableProps> = ({ students }) => {
   const columns = React.useMemo(() => [
-    { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'age', header: 'Age' },
-    { accessorKey: 'marks', header: 'Marks' },
-    { accessorKey: 'rollNumber', header: 'Roll Number' },
-    { accessorKey: 'avgMarks', header: 'Average Marks' },
-    { accessorKey: 'class', header: 'Class' },
-    { accessorKey: 'city', header: 'City' },
-    { accessorKey: 'attendance', header: 'Attendance' },
+    { accessorKey: 'name', header: 'Name', enableSorting: true },
+    { accessorKey: 'age', header: 'Age', enableSorting: true },
+    { accessorKey: 'marks', header: 'Marks', enableSorting: true },
+    { accessorKey: 'rollNumber', header: 'Roll Number', enableSorting: true },
+    { accessorKey: 'avgMarks', header: 'Average Marks', enableSorting: true },
+    { accessorKey: 'class', header: 'Class', enableSorting: true },
+    { accessorKey: 'city', header: 'City', enableSorting: true },
+    { accessorKey: 'attendance', header: 'Attendance', enableSorting: true },
   ], []);
 
   const table = useReactTable({
     data: students,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    columnResizeMode: "onChange",
   });
 
   return (
-    <div className="overflow-x-auto w-5/6 mx-24">
+    <div className="overflow-x-auto w-full mx-auto">
       <Table className="min-w-full border border-gray-300 rounded-lg shadow-lg">
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id} className="bg-gray-200">
               {headerGroup.headers.map(header => (
-                <TableHead key={header.id} className="p-3 text-left text-sm font-medium text-gray-700">
+                <TableHead key={header.id} className="p-3 text-left text-sm font-medium text-gray-700 cursor-pointer" onClick={() => header.column.toggleSorting()}>
                   {flexRender(header.column.columnDef.header, header.getContext())}
+                  {header.column.getIsSorted() ? (header.column.getIsSorted() === 'desc' ? ' 🔽' : ' 🔼') : null}
                 </TableHead>
               ))}
             </TableRow>
